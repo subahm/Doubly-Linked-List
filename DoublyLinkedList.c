@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Node of a doubly linked list
 struct Node {
@@ -10,6 +11,8 @@ struct Node {
   struct Node* next; // Pointer to next node
   struct Node* prev; // Pointer to previous node
 };
+
+struct Node* head = NULL;
 
 // Insert a new node at the front of the list using the head and an int
 void add(struct Node** head, int enter_data){
@@ -52,6 +55,30 @@ void insertFront(struct Node** head, struct Node* given_node, int enter_data){
     (*head) = new_node;
 }
 
+// Insert a new node before a given node. Positive value if ref1 is before ref2, negative otherwise.
+int distance(struct Node* ref1, struct Node* ref2){
+  int dist = 0;
+  bool PositiveDist = false;
+  while(ref1 != NULL){
+    if(ref1 == ref2){
+      PositiveDist = true;
+      break;
+    }
+    ref1 = ref1 -> next;
+    dist = dist + 1;
+  }
+  if(PositiveDist == false){
+    while(ref2 != NULL){
+      if(ref2 == ref1){
+        break;
+      }
+      ref2 = ref2 -> next;
+      dist = dist - 1;
+    }
+  }
+  return dist;
+}
+
 // Delete a node by using a pointer to node to be deleted
 void deleteNode(struct Node** head, struct Node* delete){
   if(*head == NULL || delete == NULL){
@@ -89,17 +116,15 @@ void printList(struct Node* node){
     last = last -> prev;
   }
   printf("\n");
+  printf("\n");
 }
 
 int main(){
-  struct Node* head = NULL;
+  //struct Node* head = NULL;
   add(&head, 2);
   add(&head, 4);
   add(&head, 8);
   add(&head, 10);
-
-  printf("The list is: ");
-  printList(head);
 
   insertFront(&head, head -> next, 7);
 
@@ -113,8 +138,18 @@ int main(){
   printf("The list is: ");
   printList(head);
 
-  deleteNode(&head, head->next);
-
-  printf("The list is: ");
+  add(&head, 87);
+  add(&head, 4);
+  add(&head, 8);
+  add(&head, 10);
   printList(head);
+
+  struct Node* last;
+  struct Node* node = head;
+  while(node != NULL) {
+    last = node;
+    node = node -> next;
+  }
+  printf("\nThe distance between %d and %d is: %d \n", last-> data, head->next->next->data, distance(last, head->next->next));
+  printf("\nThe distance between %d and %d is: %d \n", head->data, last-> data, distance(head, last));
 }

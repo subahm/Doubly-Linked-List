@@ -101,6 +101,31 @@ void deleteNode(struct Node** head, struct Node* delete){
   return;
 }
 
+void swap(struct Node* ref1, struct Node* ref2){
+  struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+  if(ref1 == head){
+    head = ref2;
+  }
+  else if(ref2 == head){
+    ref1 = head;
+  }
+  new_node -> next = ref1 -> next;
+  new_node -> prev = ref1 -> prev;
+  ref1 -> next = ref2->next;
+  ref2 -> next = new_node -> next;
+  if (ref1 -> next != NULL)
+    ref1 -> next -> prev = ref1;
+  if (ref2 -> next != NULL)
+    ref2 -> next -> prev = ref2;
+  ref1 -> prev = ref2 -> prev;
+  ref2 -> prev = new_node->prev;
+  if (ref1 ->prev != NULL)
+    ref1 -> prev -> next = ref1;
+  if (ref2 -> prev != NULL)
+    ref2 -> prev -> next = ref2;
+  free(new_node);
+}
+
 // Print the contents of the doubly linked list
 void printList(struct Node* node){
   struct Node* last;
@@ -152,4 +177,9 @@ int main(){
   }
   printf("\nThe distance between %d and %d is: %d \n", last-> data, head->next->next->data, distance(last, head->next->next));
   printf("\nThe distance between %d and %d is: %d \n", head->data, last-> data, distance(head, last));
+
+  printList(head);
+  printf("\nSwapping %d with %d: \n", head->data, last->data);
+  swap(head, last);
+  printList(head);
 }

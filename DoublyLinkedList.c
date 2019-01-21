@@ -126,6 +126,18 @@ void swap(struct Node* ref1, struct Node* ref2){
   free(new_node);
 }
 
+// Shifts the elements towards the begining by n number
+struct Node* shift_left(struct Node* ref, int n){
+  while(ref -> next != NULL && n != 0){
+    ref = ref -> next;
+    n = n - 1;
+  }
+  ref -> next -> prev = ref;
+  ref -> prev = NULL;
+  head = ref;
+  return head;
+}
+
 // Print the contents of the doubly linked list
 void printList(struct Node* node){
   struct Node* last;
@@ -182,4 +194,6 @@ int main(){
   printf("\nSwapping %d with %d: \n", head->data, last->data);
   swap(head, last);
   printList(head);
+
+  printList(shift_left(head,2));
 }
